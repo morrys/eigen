@@ -30,6 +30,7 @@ declare module "react-native" {
     Emission: never
     ARScreenPresenterModule: {
       presentReactScreen(module: string, props: object, modal: boolean, hidesBackButton: boolean): void
+      presentNativeScreen(module: string, props: object, modal: boolean): void
       dismissModal(): void
     }
   }
