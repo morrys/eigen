@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash dc784d12a169533d28a6fcbf160e3f63 */
+/* @relayHash e22b61380b6788b36a32605590960d0a */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -69,9 +69,9 @@ fragment Message_message on Message {
   attachments {
     id
     internalID
-    content_type: contentType
-    download_url: downloadURL
-    file_name: fileName
+    contentType
+    downloadURL
+    fileName
     ...ImagePreview_attachment
     ...PDFPreview_attachment
   }
@@ -134,7 +134,7 @@ fragment Messages_conversation_2QE1um on Conversation {
 }
 
 fragment PDFPreview_attachment on Attachment {
-  file_name: fileName
+  fileName
   ...AttachmentPreview_attachment
 }
 
@@ -489,8 +489,22 @@ return {
                               (v3/*: any*/),
                               {
                                 "kind": "ScalarField",
-                                "alias": "content_type",
+                                "alias": null,
                                 "name": "contentType",
+                                "args": null,
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "name": "downloadURL",
+                                "args": null,
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "name": "fileName",
                                 "args": null,
                                 "storageKey": null
                               },
@@ -498,13 +512,6 @@ return {
                                 "kind": "ScalarField",
                                 "alias": "download_url",
                                 "name": "downloadURL",
-                                "args": null,
-                                "storageKey": null
-                              },
-                              {
-                                "kind": "ScalarField",
-                                "alias": "file_name",
-                                "name": "fileName",
                                 "args": null,
                                 "storageKey": null
                               }
@@ -673,7 +680,7 @@ return {
   "params": {
     "operationKind": "query",
     "name": "MessagesQuery",
-    "id": "d5401fbd049722de6e2426172ac15930",
+    "id": "798041b6a821888e24c00b3aa4d09e15",
     "text": null,
     "metadata": {}
   }

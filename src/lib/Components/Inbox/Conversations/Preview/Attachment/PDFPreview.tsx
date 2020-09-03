@@ -9,19 +9,18 @@ import AttachmentPreview, { AttachmentProps } from "./AttachmentPreview"
 
 import { PDFPreview_attachment } from "__generated__/PDFPreview_attachment.graphql"
 
-const Container = styled.View`
+export const AttachmentContainer = styled.View`
   border-width: 1;
   border-color: ${colors["gray-regular"]};
   flex: 1;
   flex-direction: row;
 `
 
-const TextContainer = styled.View`
+export const AttachmentTextContainer = styled.View`
   flex: 1;
   flex-direction: column;
   align-self: center;
 `
-
 const Icon = styled(Image)`
   resize-mode: contain;
   width: 40;
@@ -37,19 +36,19 @@ interface Props extends AttachmentProps {
 
 export const PDFPreview: React.SFC<Props> = ({ attachment, onSelected }) => (
   <AttachmentPreview attachment={attachment as any} onSelected={onSelected}>
-    <Container>
+    <AttachmentContainer>
       <Icon source={require("../../../../../../../images/pdf.png")} />
-      <TextContainer>
-        <Text>{attachment.file_name}</Text>
-      </TextContainer>
-    </Container>
+      <AttachmentTextContainer>
+        <Text>{attachment.fileName}</Text>
+      </AttachmentTextContainer>
+    </AttachmentContainer>
   </AttachmentPreview>
 )
 
 export default createFragmentContainer(PDFPreview, {
   attachment: graphql`
     fragment PDFPreview_attachment on Attachment {
-      file_name: fileName
+      fileName
       ...AttachmentPreview_attachment
     }
   `,

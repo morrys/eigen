@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 7033f9c6544d49429db39eeb347f2c5c */
+/* @relayHash 69c542770d3bd0718b047d6dfa8e5a34 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -71,16 +71,16 @@ fragment Message_message on Message {
   attachments {
     id
     internalID
-    content_type: contentType
-    download_url: downloadURL
-    file_name: fileName
+    contentType
+    downloadURL
+    fileName
     ...ImagePreview_attachment
     ...PDFPreview_attachment
   }
 }
 
 fragment PDFPreview_attachment on Attachment {
-  file_name: fileName
+  fileName
   ...AttachmentPreview_attachment
 }
 */
@@ -269,8 +269,22 @@ return {
                       },
                       {
                         "kind": "ScalarField",
-                        "alias": "content_type",
+                        "alias": null,
                         "name": "contentType",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "downloadURL",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "fileName",
                         "args": null,
                         "storageKey": null
                       },
@@ -278,13 +292,6 @@ return {
                         "kind": "ScalarField",
                         "alias": "download_url",
                         "name": "downloadURL",
-                        "args": null,
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "ScalarField",
-                        "alias": "file_name",
-                        "name": "fileName",
                         "args": null,
                         "storageKey": null
                       }
@@ -301,7 +308,7 @@ return {
   "params": {
     "operationKind": "mutation",
     "name": "SendConversationMessageMutation",
-    "id": "5518cc4fbdbc60ee5dc61063dea01c6a",
+    "id": "adb70c93e4fd6113f112bbac26d1ff26",
     "text": null,
     "metadata": {}
   }

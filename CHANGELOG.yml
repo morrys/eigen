@@ -9,6 +9,7 @@ upcoming:
     - Disable facebook access to idfa - brian
     - Adds lab option for new inquiry flow - lily
     - Migrate away from UIWebview - mounir
+    - Add download option for non-preview-able conversation attachments - sepand
   user_facing:
     - Fix app crash when tapping fair map - brian
 
