@@ -121,6 +121,7 @@ const PossibleRedirect: React.FC<{ slug: string }> = ({ slug }) => {
           setResult({ webURL: response.url })
         } else {
           console.log("replacing view with", response.url)
+          // TODO: this is bad UX let's fix it at some point
           goBack()
           setTimeout(() => {
             navigate(response.url)
