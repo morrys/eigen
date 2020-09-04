@@ -2,12 +2,17 @@ import { VanityURLEntity_fairOrPartner } from "__generated__/VanityURLEntity_fai
 import { VanityURLEntityQuery } from "__generated__/VanityURLEntityQuery.graphql"
 import { HeaderTabsGridPlaceholder } from "lib/Components/HeaderTabGridPlaceholder"
 import InternalWebView from "lib/Components/InternalWebView"
+import { Stack } from "lib/Components/Stack"
+import { goBack, navigate } from "lib/navigation/navigate"
+import { matchRoute } from "lib/navigation/routes"
 import { defaultEnvironment } from "lib/relay/createEnvironment"
+import { AppStore } from "lib/store/AppStore"
 import { renderWithPlaceholder } from "lib/utils/renderWithPlaceholder"
 import { useScreenDimensions } from "lib/utils/useScreenDimensions"
-import { Flex, Spinner } from "palette"
-import React from "react"
-import { View } from "react-native"
+import { Button, Flex, Spinner } from "palette"
+import { Text } from "palette"
+import React, { useEffect, useState } from "react"
+import { Linking, View } from "react-native"
 import { createFragmentContainer, graphql, QueryRenderer } from "react-relay"
 import { FairContainer, FairPlaceholder, FairQueryRenderer } from "../Fair/Fair"
 import { PartnerContainer } from "../Partner"
@@ -79,7 +84,7 @@ export const VanityURLEntityRenderer: React.SFC<RendererProps> = ({ entity, slug
                     <HeaderTabsGridPlaceholder />
                   </View>
                 )
-              case "unknown":
+              default:
                 return (
                   <Flex style={{ flex: 1 }} flexDirection="row" alignItems="center" justifyContent="center">
                     <Spinner />
@@ -91,11 +96,69 @@ export const VanityURLEntityRenderer: React.SFC<RendererProps> = ({ entity, slug
             if (props.vanityURLEntity) {
               return <VanityURLEntityFragmentContainer fairOrPartner={props.vanityURLEntity} originalSlug={slug} />
             } else {
-              return <InternalWebView route={slug} />
+              return <PossibleRedirect slug={slug} />
             }
           },
         })}
       />
     )
   }
+}
+
+function join(...parts: string[]) {
+  return parts.map(s => s.replace(/(^\/+|\/+$)/g, "")).join("/")
+}
+
+const PossibleRedirect: React.FC<{ slug: string }> = ({ slug }) => {
+  const [result, setResult] = useState<null | { webURL: string } | { error: true }>()
+  const { authenticationToken, webURL } = AppStore.useAppState(store => store.native.sessionState)
+  useEffect(() => {
+    fetch(join(webURL, slug), { method: "HEAD", headers: { "X-Access-Token": authenticationToken } }).then(response => {
+      if (response.ok) {
+        const screen = matchRoute(response.url)
+        if (screen.type === "external_url" || screen.module === "WebView") {
+          console.log("redirecting to web URL", response.url)
+          setResult({ webURL: response.url })
+        } else {
+          console.log("replacing view with", response.url)
+          goBack()
+          setTimeout(() => {
+            navigate(response.url)
+          }, 10)
+        }
+      } else {
+        setResult({ error: true })
+      }
+    })
+  }, [])
+
+  if (!result) {
+    return (
+      <Flex style={{ flex: 1 }} flexDirection="row" alignItems="center" justifyContent="center">
+        <Spinner />
+      </Flex>
+    )
+  }
+
+  if ("error" in result) {
+    return (
+      <Stack style={{ flex: 1 }} mx={2} alignItems="center" justifyContent="center">
+        <Text variant="largeTitle">404</Text>
+        <Text variant="text" textAlign="center">
+          We can't find that page.
+        </Text>
+
+        <Button
+          variant="secondaryOutline"
+          onPress={() => {
+            Linking.openURL(join(webURL, slug))
+          }}
+        >
+          Open in browser
+        </Button>
+      </Stack>
+    )
+  }
+
+  return <InternalWebView route={slug} />
 }
